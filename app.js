@@ -49,6 +49,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/",(req,res) => res.send("Hello World"))
 app.use("/api",routes)
 
 app.use((err, req, res, next) => {
