@@ -31,7 +31,6 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.error("MongoDB connection error:", err));
 
-app.set('trust proxy', 1);
 
 app.use(session({
   secret: process.env.SESSION_SECRET || "devsecret",
@@ -42,11 +41,16 @@ app.use(session({
     collectionName: "sessions"
   }),
   cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+    maxAge: 365 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+      httpOnly: true,
   }
 }));
+
+app.set('trust proxy', 1);
+
 
 app.use(passport.initialize());
 app.use(passport.session());
