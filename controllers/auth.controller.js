@@ -102,7 +102,10 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
 
 export const getMyProfile = asyncHandler(async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user?._id;
+  if(!userId){
+    return res.status(402).send(apiResponse.error('User not found'));
+  }
 
   const { page, limit, skip } = pagination(req.query.page, 222);
 
